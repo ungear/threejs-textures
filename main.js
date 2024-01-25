@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { addAxes } from "./helpers";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdedede);
@@ -13,7 +12,12 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-addAxes(scene, 1000);
+const axesHelper = new THREE.AxesHelper(1000)
+scene.add(axesHelper)
+
+const light = new THREE.PointLight(0xffffff, 1000)
+light.position.set(100, 100, 400)
+scene.add(light)
 
 // box
 const boxTexture = new THREE.TextureLoader().load('/crate.gif');
@@ -35,22 +39,31 @@ box.add(edges)
 scene.add( box );
 
 // box 2
-const box2Texture = new THREE.TextureLoader().load('/limestone_flat_textured-Unity/limestone_flat_textured_Base_Color.png');
+const box2Texture = new THREE.TextureLoader().load('/limestone_flat_textured-Unity/limestone_flat_textured_Base_Color.png', () =>{
+  const pmremGenerator = new THREE.PMREMGenerator(renderer)
+  box2Material.envMap = pmremGenerator.fromEquirectangular(box2Texture).texture
+  pmremGenerator.dispose()
+});
+const box2Normal = new THREE.TextureLoader().load('/limestone_flat_textured-Unity/limestone_flat_textured_Normal.png');
+const box2AmbientTexture = new THREE.TextureLoader().load('/limestone_flat_textured-Unity/limestone_flat_textured_Ambient_Occlusion.png');
+box2Texture.repeat.set( 1,1 );
+box2Texture.repeat.set( 1,1 );
 box2Texture.repeat.set( 1,1 );
 box2Texture.wrapT = THREE.RepeatWrapping;
 box2Texture.wrapS = THREE.RepeatWrapping;
 const box2Geometry = new THREE.BoxGeometry( 500, 500, 100 );
-const boxsMaterial = new THREE.MeshBasicMaterial( { 
-  //color: 0x00ff00,
-  map: box2Texture 
+const box2Material = new THREE.MeshStandardMaterial( { 
+  map: box2Texture,
+  normalMap: box2Normal,
+  aoMap: box2AmbientTexture
+
 } );
-const box2 = new THREE.Mesh( box2Geometry, boxsMaterial );
+const box2 = new THREE.Mesh( box2Geometry, box2Material );
 box2.position.set(900,300,0)
 const edges2Geometry = new THREE.EdgesGeometry( box2Geometry );
 const edge2Color = new THREE.Color(0x000000)
 const edges2Material = new THREE.LineBasicMaterial( { color: edge2Color}); 
 const edges2 = new THREE.LineSegments( edges2Geometry, edges2Material);
-box2.add(edges2)
 scene.add( box2 );
 
 
