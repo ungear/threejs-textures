@@ -29,17 +29,35 @@ const box = new THREE.Mesh( boxGeometry, boxMaterial );
 box.position.set(300,300,0)
 const edgesGeometry = new THREE.EdgesGeometry( boxGeometry );
 const edgeColor = new THREE.Color(0x000000)
-  //.multiplyScalar(Config.Block.EdgeColorMultiplier);
 const edgesMaterial = new THREE.LineBasicMaterial( { color: edgeColor}); 
 const edges = new THREE.LineSegments( edgesGeometry, edgesMaterial);
 box.add(edges)
 scene.add( box );
 
-camera.position.set(800, 700, 500);
-camera.lookAt(300,200,0);
+// box 2
+const box2Texture = new THREE.TextureLoader().load('/limestone_flat_textured-Unity/limestone_flat_textured_Base_Color.png');
+box2Texture.repeat.set( 1,1 );
+box2Texture.wrapT = THREE.RepeatWrapping;
+box2Texture.wrapS = THREE.RepeatWrapping;
+const box2Geometry = new THREE.BoxGeometry( 500, 500, 100 );
+const boxsMaterial = new THREE.MeshBasicMaterial( { 
+  //color: 0x00ff00,
+  map: box2Texture 
+} );
+const box2 = new THREE.Mesh( box2Geometry, boxsMaterial );
+box2.position.set(900,300,0)
+const edges2Geometry = new THREE.EdgesGeometry( box2Geometry );
+const edge2Color = new THREE.Color(0x000000)
+const edges2Material = new THREE.LineBasicMaterial( { color: edge2Color}); 
+const edges2 = new THREE.LineSegments( edges2Geometry, edges2Material);
+box2.add(edges2)
+scene.add( box2 );
+
+
 const controls = new OrbitControls( camera, renderer.domElement );
 const loader = new GLTFLoader();
-
+camera.position.set(800, 700, 500);
+camera.lookAt(300,300,0);
 
 function animate() {
 	requestAnimationFrame( animate );
