@@ -30,7 +30,7 @@ const boxMaterial = new THREE.MeshBasicMaterial( {
   map: boxTexture 
 } );
 const box = new THREE.Mesh( boxGeometry, boxMaterial );
-box.position.set(300,300,0)
+box.position.set(-300,300,0)
 const edgesGeometry = new THREE.EdgesGeometry( boxGeometry );
 const edgeColor = new THREE.Color(0x000000)
 const edgesMaterial = new THREE.LineBasicMaterial( { color: edgeColor}); 
@@ -51,21 +51,56 @@ box2Texture.repeat.set( 1,1 );
 box2Texture.repeat.set( 1,1 );
 box2Texture.wrapT = THREE.RepeatWrapping;
 box2Texture.wrapS = THREE.RepeatWrapping;
-const box2Geometry = new THREE.BoxGeometry( 500, 500, 100 );
+const box2Geometry = new THREE.BoxGeometry(500, 500, 100 );
 const box2Material = new THREE.MeshStandardMaterial( { 
   map: box2Texture,
   normalMap: box2Normal,
-  aoMap: box2AmbientTexture
-
+  aoMap: box2AmbientTexture,
 } );
 const box2 = new THREE.Mesh( box2Geometry, box2Material );
-box2.position.set(900,300,0)
+box2.position.set(750,250,0)
 const edges2Geometry = new THREE.EdgesGeometry( box2Geometry );
 const edge2Color = new THREE.Color(0x000000)
 const edges2Material = new THREE.LineBasicMaterial( { color: edge2Color}); 
 const edges2 = new THREE.LineSegments( edges2Geometry, edges2Material);
 scene.add( box2 );
 
+// box 3
+const box3Texture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_albedo.png', () =>{
+  const pmremGenerator = new THREE.PMREMGenerator(renderer)
+  box3Material.envMap = pmremGenerator.fromEquirectangular(box3Texture).texture
+  pmremGenerator.dispose()
+});
+// const box3Texture = new THREE.CubeTextureLoader().load([
+//   '/brick-wall-unity/brick-wall_albedo.png', 
+//   '/brick-wall-unity/brick-wall_albedo.png', 
+//   '/brick-wall-unity/brick-wall_albedo.png', 
+//   '/brick-wall-unity/brick-wall_albedo.png', 
+//   '/brick-wall-unity/brick-wall_albedo.png', 
+//   '/brick-wall-unity/brick-wall_albedo.png', 
+// ], () => {
+//   const pmremGenerator = new THREE.PMREMGenerator(renderer)
+//   box3Material.envMap = pmremGenerator.fromCubemap(box3Texture).texture
+//   pmremGenerator.dispose()
+// })
+const box3Normal = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_normal-ogl.png');
+const box3AmbientTexture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_ao.png');
+const box3DisplacementTexture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_height.png');
+box3Texture.wrapT = THREE.RepeatWrapping;
+box3Texture.wrapS = THREE.RepeatWrapping;
+//const box3Geometry = new THREE.PlaneGeometry(500, 500, 100, 100 );
+const box3Geometry = new THREE.BoxGeometry(500, 500, 500, 100, 100, 100 );
+const box3Material = new THREE.MeshStandardMaterial( { 
+  map: box3Texture,
+  normalMap: box3Normal,
+  aoMap: box3AmbientTexture,
+  displacementMap: box3DisplacementTexture,
+  displacementScale: 50,
+  displacementBias: -25
+} );
+const box3 = new THREE.Mesh( box3Geometry, box3Material );
+box3.position.set(250,250,0)
+scene.add( box3 );
 
 const controls = new OrbitControls( camera, renderer.domElement );
 const loader = new GLTFLoader();
