@@ -85,7 +85,7 @@ const box3Texture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall
 // })
 const box3Normal = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_normal-ogl.png');
 const box3AmbientTexture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_ao.png');
-const box3DisplacementTexture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_height.png');
+const box3DisplacementTexture = new THREE.TextureLoader().load('/brick-wall-unity/brick-wall_height_edited.png');
 box3Texture.wrapT = THREE.RepeatWrapping;
 box3Texture.wrapS = THREE.RepeatWrapping;
 //const box3Geometry = new THREE.PlaneGeometry(500, 500, 100, 100 );
